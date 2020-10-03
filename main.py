@@ -1,15 +1,22 @@
 # This is a sample Python script.
 import random
+import jugada
 
-palos = ("Corazones", "Picas", "Diamantes", "Treboles")
+palos = {0: ["Corazones", "♥"], 1: ["Picas", "♠"], 2: ["Diamantes", "♦"], 3: ["Treboles", "♣"]}
 numeros = {1: "AS", 2: "2", 3: "3", 4: "4", 5: "5", 6: "6", 7: "7", 8: "8", 9: "9", 10: "J", 11: "Q", 12: "K"}
 
 
 class Carta:
     def __init__(self, numero, palo):
         self.numero = numero
-        self.palo = palo
+        self.palo = palos.get(palo)[0]
         self.numeroescrito = numeros.get(numero)
+        self.palocaracter = palos.get(palo)[1]
+
+
+def imprimircartas(cartas):
+    for carta in cartas:
+        print(carta.numeroescrito + " de " + carta.palocaracter)
 
 
 def sacar_cartas(numeroasacar):
@@ -54,15 +61,13 @@ def apostar():
         apostar()
 
 
-# Press Mayús+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.palos
-# Press the green button in the gutter to run the script.
 if __name__ == '__main__':
     global cartas
     cartas = list()
     for i in range(0, 4):
         for j in range(1, 13):
-            cartas.append(Carta(j, palos[i]))
+            cartas.append(Carta(j, i))
+
     cartasdelpc = sacar_cartas(2)
     cartasdeluser = sacar_cartas(2)
     print("Bienvenido a tu juego favorito de TEXAS HOLDEM \n"
@@ -70,9 +75,28 @@ if __name__ == '__main__':
     inicio()
     print("De acuerdo, Primera ronda\n"
           "Aqui estan tus cartas\n")
-    for carta in cartasdeluser:
-        print(carta.numeroescrito + " de " + carta.palo)
+    imprimircartas(cartasdeluser)
     print("\n")
     seguir = apostar()
-    if seguir == 1:
-        
+    cartasdelamesa = sacar_cartas(3)
+    while len(cartasdelamesa) != 5:
+        print("Cartas en la mesa:")
+        imprimircartas(cartasdelamesa)
+        apostar()
+        cartasdelamesa.update(sacar_cartas(1))
+
+    imprimircartas(cartasdelamesa)
+    print("Tus cartas son: ")
+    imprimircartas(cartasdeluser)
+    print("Las cartas de la maquina son: ")
+    imprimircartas(cartasdelpc)
+    puntuacionuser = jugada.jugada_ganadora(cartasdelamesa, cartasdeluser)
+    puntuacionpc = jugada.jugada_ganadora(cartasdelamesa, cartasdelpc)
+    if puntuacionpc[0] > puntuacionuser[0]:
+        print("gana el user con la jugada:" + str(puntuacionuser[0]))
+        imprimircartas(puntuacionuser[1])
+    elif puntuacionpc[0]< puntuacionuser[0]:
+        print("gana la maquina con la jugada "+str(puntuacionpc[0])+"y las cartas de la jugada son \n")
+        imprimircartas(puntuacionpc[1])
+    else:
+        print("empate")
