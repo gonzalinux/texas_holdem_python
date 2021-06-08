@@ -2,14 +2,13 @@ __name__ = "jugada"
 
 
 def cmprroyal(cartas):
-    if cmprescolor(cartas) == None:
+    if cmprescolor(cartas) is None:
         return None
     for i in range(len(cartas) - 4):
         if cartas[i].numero == cartas[i + 1].numero + 1 == cartas[i + 2].numero + 2 == cartas[i + 3].numero + 3 == \
                 cartas[i + 4].numero + 4 and cartas[i].palo == cartas[i + 1].palo == \
                 cartas[i + 2].palo == cartas[i + 3].palo == cartas[i + 4].palo:
             return cartas[i:i + 4]
-
 
 
 def cmprescolor(cartas):
@@ -36,11 +35,11 @@ def cmprfull(cartas):
     trio = cmpr3(nuevoconj)
     if trio is None:
         return None
-    full=trio.copy()
+    full = trio.copy()
     nuevoconj.remove(trio[0])
     nuevoconj.remove(trio[1])
     nuevoconj.remove(trio[2])
-    trio=cmpr2(nuevoconj)
+    trio = cmpr2(nuevoconj)
     if trio is None:
         return None
     full.extend(trio)
@@ -67,10 +66,10 @@ def cmpr22(cartas):
     pareja = cmpr2(nuevoconj)
     if pareja == None:
         return None
-    doble=pareja.copy()
+    doble = pareja.copy()
     nuevoconj.remove(pareja[0])
     nuevoconj.remove(pareja[1])
-    pareja=cmpr2(nuevoconj)
+    pareja = cmpr2(nuevoconj)
     if pareja is None:
         return None
     doble.extend(pareja)
@@ -108,7 +107,7 @@ def ordenarcartas(cartas):
 def jugada_ganadora(cartasmesa, cartasjugador):
     cartasmesa.update(cartasjugador)
     cartas = ordenarcartas(cartasmesa)
-    jugadas=list()
+    jugadas = list()
     jugadas.append(cmprroyal(cartas))
     jugadas.append(cmprescolor(cartas))
     jugadas.append(cmpr4(cartas))
@@ -120,6 +119,6 @@ def jugada_ganadora(cartasmesa, cartasjugador):
 
     for i in range(len(jugadas)):
         if jugadas[i] is not None:
-            return [i,jugadas[i]]
+            return [i, jugadas[i]]
 
-    return [12-cmprmasalta(ordenarcartas(cartasjugador)).numero]
+    return [12 - cmprmasalta(ordenarcartas(cartasjugador)).numero]

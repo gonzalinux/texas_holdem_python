@@ -1,22 +1,16 @@
 # This is a sample Python script.
 import random
 import jugada
+import tkinter
 
-palos = {0: ["Corazones", "♥"], 1: ["Picas", "♠"], 2: ["Diamantes", "♦"], 3: ["Treboles", "♣"]}
-numeros = {1: "AS", 2: "2", 3: "3", 4: "4", 5: "5", 6: "6", 7: "7", 8: "8", 9: "9", 10: "J", 11: "Q", 12: "K"}
-
-
-class Carta:
-    def __init__(self, numero, palo):
-        self.numero = numero
-        self.palo = palos.get(palo)[0]
-        self.numeroescrito = numeros.get(numero)
-        self.palocaracter = palos.get(palo)[1]
+__name__ = "Partida"
 
 
-def imprimircartas(cartas):
-    for carta in cartas:
-        print(carta.numeroescrito + " de " + carta.palocaracter)
+
+
+
+
+
 
 
 def sacar_cartas(numeroasacar):
@@ -33,7 +27,33 @@ def sacar_cartas(numeroasacar):
 
 
 def inicio():
-    entrada = input("Escriba sus decisiones:\n"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   """ entrada = input("Escriba sus decisiones:\n"
                     "Jugar Salir\n")
     if entrada == "Salir":
         print("Hasta la proxima")
@@ -61,7 +81,7 @@ def apostar():
         apostar()
 
 
-if __name__ == '__main__':
+def partida():
     global cartas
     cartas = list()
     for i in range(0, 4):
@@ -95,8 +115,9 @@ if __name__ == '__main__':
     if puntuacionpc[0] > puntuacionuser[0]:
         print("gana el user con la jugada:" + str(puntuacionuser[0]))
         imprimircartas(puntuacionuser[1])
-    elif puntuacionpc[0]< puntuacionuser[0]:
-        print("gana la maquina con la jugada "+str(puntuacionpc[0])+"y las cartas de la jugada son \n")
+    elif puntuacionpc[0] < puntuacionuser[0]:
+        print("gana la maquina con la jugada " + str(puntuacionpc[0]) + "y las cartas de la jugada son \n")
         imprimircartas(puntuacionpc[1])
     else:
         print("empate")
+"""
