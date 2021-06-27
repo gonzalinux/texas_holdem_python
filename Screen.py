@@ -21,8 +21,13 @@ class Screen(Frame):
         self.probabilidadapuesta = 0.2
         super().__init__(master)
         self.parent = master
+        self.callback = self.fase3cartas
         self.player = Jugador(1000, "", None)
         self.maquina = Jugador(1000, self.getRandomName(), None)
+        # if random.random()< 0.5:
+        self.player.apuesta = 5
+        # else:
+        #    self.maquina.apuesta=5
         self.place(x=self.parent.winfo_width() / 2, y=self.parent.winfo_height() / 3)
         self.place(relwidth=1, relheight=1)
         self["bg"] = master["bg"]
@@ -91,7 +96,7 @@ class Screen(Frame):
         self.nombreMaquina.pack(fill=BOTH)
         self.frameNombreMaquina.grid(row=0, column=2, columnspan=15)
 
-        self.imagenpoker = Image.open("../assets/ficha_negra.png")
+        self.imagenpoker = Image.open("./assets/ficha_negra.png")
         self.imagenpoker = self.imagenpoker.resize((100, 100))
         self.imagenpoker = ImageTk.PhotoImage(self.imagenpoker)
         self.canvasApuestaMaquina = Canvas(pantalla, bg="white", width=100, height=100, borderwidth=0,
@@ -221,7 +226,7 @@ class Screen(Frame):
     def subirApuestaPlayer(self, cantidad):
 
         if self.maquina.apuesta > (self.player.apuesta + cantidad):
-            cantidad = 0
+            cantidad = self.maquina.apuesta - self.player.apuesta
         if cantidad > self.player.fichas:
             cantidad = self.player.fichas
         self.player.apuesta += cantidad
@@ -247,33 +252,33 @@ class Screen(Frame):
     def faseCiega(self):
         self.frameApuesta = Frame(self.parent)
         self.frameApuesta.grid(column=1, row=3, rowspan=2, columnspan=4, sticky="nw")
-        self.labelApuesta = Label(self.frameApuesta, text="HOAL", font=("Arial", 30))
-        self.imagenFlechaArriba = Image.open("../assets/f_arriba.png")
+        self.labelApuesta = Label(self.frameApuesta, text="APUESTA", font=("Arial", 25))
+        self.imagenFlechaArriba = Image.open("./assets/f_arriba.png")
         self.imagenFlechaArriba = self.imagenFlechaArriba.resize((50, 50))
         self.imagenFlechaArriba = ImageTk.PhotoImage(self.imagenFlechaArriba)
 
-        self.imagenFlechaArribaOn = Image.open("../assets/f_arriba_on.png")
+        self.imagenFlechaArribaOn = Image.open("./assets/f_arriba_on.png")
         self.imagenFlechaArribaOn = self.imagenFlechaArribaOn.resize((50, 50))
         self.imagenFlechaArribaOn = ImageTk.PhotoImage(self.imagenFlechaArribaOn)
         self.botonsubir = Label(self.frameApuesta, image=self.imagenFlechaArriba)
-        self.imagenFlechaAbajo = Image.open("../assets/f_abajo.png")
+        self.imagenFlechaAbajo = Image.open("./assets/f_abajo.png")
         self.imagenFlechaAbajo = self.imagenFlechaAbajo.resize((50, 50))
         self.imagenFlechaAbajo = ImageTk.PhotoImage(self.imagenFlechaAbajo)
-        self.imagenFlechaAbajoOn = Image.open("../assets/f_abajo_on.png")
+        self.imagenFlechaAbajoOn = Image.open("./assets/f_abajo_on.png")
         self.imagenFlechaAbajoOn = self.imagenFlechaAbajoOn.resize((50, 50))
         self.imagenFlechaAbajoOn = ImageTk.PhotoImage(self.imagenFlechaAbajoOn)
 
-        self.imagenTick = Image.open("../assets/tick.png")
+        self.imagenTick = Image.open("./assets/tick.png")
         self.imagenTick = self.imagenTick.resize((50, 50))
         self.imagenTick = ImageTk.PhotoImage(self.imagenTick)
 
-        self.imagenTickOn = Image.open("../assets/tick.png")
+        self.imagenTickOn = Image.open("./assets/tick.png")
         self.imagenTickOn = self.imagenTickOn.resize((50, 50))
         self.imagenTickOn = ImageTk.PhotoImage(self.imagenTickOn)
-        self.imagenCruz = Image.open("../assets/cruz.png")
+        self.imagenCruz = Image.open("./assets/cruz.png")
         self.imagenCruz = self.imagenCruz.resize((50, 50))
         self.imagenCruz = ImageTk.PhotoImage(self.imagenCruz)
-        self.imagenCruzOn = Image.open("../assets/cruz_on.png")
+        self.imagenCruzOn = Image.open("./assets/cruz_on.png")
         self.imagenCruzOn = self.imagenCruzOn.resize((50, 50))
         self.imagenCruzOn = ImageTk.PhotoImage(self.imagenCruzOn)
 
@@ -281,41 +286,93 @@ class Screen(Frame):
         self.botonAceptar = Label(self.frameApuesta, image=self.imagenTick)
         self.botonCancelar = Label(self.frameApuesta, image=self.imagenCruz)
 
-        def iluminarbotonsubir():
-            self.subirApuestaPlayer(5)
-            self.botonsubir["image"] = self.imagenFlechaArribaOn
-            self.botonsubir.after(400, lambda: self.botonsubir.config(image=self.imagenFlechaArriba))
-
-        def iluminarbotonbajar():
-            self.subirApuestaPlayer(-5)
-            self.botonbajar["image"] = self.imagenFlechaAbajoOn
-            self.botonbajar.after(400, lambda: self.botonbajar.config(image=self.imagenFlechaAbajo))
-
-        def iluminarbotonacept():
-            self.subirApuestaPlayer(-5)
-            self.botonAceptar["image"] = self.imagenTickOn
-            self.botonAceptar.after(400, lambda: self.botonAceptar.config(image=self.imagenTick))
-
-        def iluminarbotoncanc():
-            self.rendirse()
-            self.botonCancelar["image"] = self.imagenCruzOn
-            self.botonCancelar.after(400, lambda: self.botonCancelar.config(image=self.imagenCruz))
-
-        self.botonsubir.bind("<Button-1>", lambda e: iluminarbotonsubir())
-        self.botonbajar.bind("<Button-1>", lambda e: iluminarbotonbajar())
-        self.botonCancelar.bind("<Button-1>", lambda e: iluminarbotoncanc())
-        self.botonAceptar.bind("<Button-1>", lambda e: iluminarbotonacept())
+        self.botonsubir.bind("<Button-1>", lambda e: self.iluminarbotonsubir())
+        self.botonbajar.bind("<Button-1>", lambda e: self.iluminarbotonbajar())
+        self.botonCancelar.bind("<Button-1>", lambda e: self.iluminarbotoncanc())
+        self.botonAceptar.bind("<Button-1>", lambda e: self.iluminarbotonacept())
         self.labelApuesta.pack(side="top", anchor=NW)
         self.botonsubir.pack(side="left")
         self.botonbajar.pack(side="left")
         self.botonAceptar.pack(side=LEFT)
         self.botonCancelar.pack(side=LEFT)
 
-    def rendirse(self):
-        self.frameHasPerdido=Frame(self.parent, bg="red")
-        self.labelHasPerdido=Label(self.frameHasPerdido,text="HAS PERDIDO",font=("Arial", 40), fg="black", bg=self.frameHasPerdido["bg"])
-        self.labelexplica = Label(self.frameHasPerdido, text="Te has retirado", font=("Arial", 30), fg="black",
+    def pierdeElPlayer(self, razon):
+        self.frameHasPerdido = Frame(self.parent, bg="red")
+        self.labelHasPerdido = Label(self.frameHasPerdido, text="HAS PERDIDO", font=("Arial", 40), fg="black",
                                      bg=self.frameHasPerdido["bg"])
-        self.frameHasPerdido.grid(column=0, row=0,columnspan=18,rowspan=6,sticky="news")
-        self.labelHasPerdido.pack(expand=True,fill=BOTH)
-        self.labelexplica.pack(expand=True,fill=BOTH)
+        self.labelexplica = Label(self.frameHasPerdido, text=razon, font=("Arial", 30), fg="black",
+                                  bg=self.frameHasPerdido["bg"])
+        self.frameHasPerdido.grid(column=0, row=0, columnspan=18, rowspan=6, sticky="news")
+        self.labelHasPerdido.pack(expand=True, fill=BOTH)
+        self.labelexplica.pack(expand=True, fill=BOTH)
+
+    def apuesta(self):
+        if self.player.apuesta < self.maquina.apuesta:
+            self.error = Label(self.parent, text="No puedes apostar menos que el rival", font=("Arial", 20, 'bold'),
+                               fg="red")
+            self.error.grid(column=6, row=3, columnspan=10)
+            self.error.after(500, lambda: self.error.grid_forget())
+            return
+        if self.player.apuesta == self.maquina.apuesta:
+            self.callback()
+            return
+        antes = self.maquina.apuesta
+        self.subirApuestaMaquina()
+        if antes == self.maquina.apuesta:
+            self.callback()
+
+    def iluminarbotonacept(self):
+        self.apuesta()
+        self.botonAceptar["image"] = self.imagenTickOn
+        self.botonAceptar.after(400, lambda: self.botonAceptar.config(image=self.imagenTick))
+
+    def iluminarbotonsubir(self):
+        self.subirApuestaPlayer(5)
+        self.botonsubir["image"] = self.imagenFlechaArribaOn
+        self.botonsubir.after(400, lambda: self.botonsubir.config(image=self.imagenFlechaArriba))
+
+    def iluminarbotonbajar(self):
+        self.subirApuestaPlayer(-5)
+        self.botonbajar["image"] = self.imagenFlechaAbajoOn
+        self.botonbajar.after(400, lambda: self.botonbajar.config(image=self.imagenFlechaAbajo))
+
+    def iluminarbotoncanc(self):
+        self.pierdeElPlayer("Te has retirado")
+        self.botonCancelar["image"] = self.imagenCruzOn
+        self.botonCancelar.after(400, lambda: self.botonCancelar.config(image=self.imagenCruz))
+
+    def fase3cartas(self):
+        self.subirApuestaMaquina()
+        self.mostrarCartas(self.cartasMesaCanvases, self.cartasmesa, 3, self.imagenesCartasMesa)
+        self.callback = self.fase4cartas
+
+    def fase4cartas(self):
+        self.subirApuestaMaquina()
+        self.mostrarCartas(self.cartasMesaCanvases, self.cartasmesa, 4, self.imagenesCartasMesa)
+        self.callback = self.fase5cartas
+
+    def fase5cartas(self):
+
+        self.subirApuestaMaquina()
+        self.mostrarCartas(self.cartasMesaCanvases, self.cartasmesa, 5, self.imagenesCartasMesa)
+        self.callback = self.termina
+
+    def termina(self):
+        print("termina")
+        self.mostrarCartas(self.cartasMaquinaCanvases, self.maquina.cartas, 2, self.imagenesCartasMaquina)
+
+        puntuacionMquina = Jugadas.jugada_ganadora(self.cartasmesa, self.maquina.cartas)
+        puntuacionJugador = Jugadas.jugada_ganadora(self.cartasmesa, self.player.cartas)
+
+        if puntuacionJugador[0] > puntuacionMquina[0]:
+            self.ganaElPlayer()
+        elif puntuacionMquina[0] > puntuacionJugador[0]:
+            self.pierdeElPlayer(
+                "tiene la puntuacion mas baja " + str(puntuacionJugador[0]) + " comparada a la maquina " + str(
+                    puntuacionMquina[0]))
+        elif puntuacionMquina[1].numero > puntuacionJugador[1].numero:
+            self.pierdeElPlayer(
+                "tiene la carta mas baja " + str(puntuacionJugador[1].encadena) + " comparada a la maquina " + str(
+                    puntuacionMquina[1].encadena))
+        elif puntuacionMquina[1].numero < puntuacionJugador[1].numero:
+            self.ganaElPlayer()

@@ -67,7 +67,6 @@ def cmprfull(cartas):
         if respuesta is None:
             return None
 
-        print(respuesta[1].numero)
         return [9, getmasalta([cartanterior, respuesta[1]])]
     else:
         return None
@@ -223,7 +222,6 @@ def jugada_ganadora(cartasmesa, cartasjugador):
     cartasmesa += cartasjugador
     cartas = ordenarcartas(cartasmesa)
     jugadas = list()
-    print("aqui se ha invertido")
     jugadas.append(cmprrescolor(cartas))
     jugadas.append(cmpr4(cartas))
     jugadas.append(cmprfull(cartas))
