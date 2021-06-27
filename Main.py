@@ -8,19 +8,7 @@ from tkinter import *
 import Screen
 import Carta
 
-def sacar_cartas(numeroasacar):
-  x = 0
 
-  for i in range(0, 4):
-    for j in range(1, 13):
-      cartas.append(Carta(j, i))
-  cartasmesa = set()
-  while len(cartasmesa) != numeroasacar:
-    aux = cartas[random.randint(0, len(cartas) - 1)]
-    cartasmesa.add(aux)
-    cartas.remove(aux)
-
-  return cartasmesa
 
 
 
