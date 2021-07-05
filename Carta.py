@@ -1,7 +1,7 @@
 from tkinter import *
 
-palos = {0: ["Corazones", "♥", "./assets/palos/heart.png"], 1: ["Picas", "♠", "./assets/palos/pica.png"],
-         2: ["Diamantes", "♦", "./assets/palos/diamond.png"], 3: ["Treboles", "♣", "./assets/palos/trebol.png"]}
+palos = {0: ["Corazones", "♥", "\\assets\\palos\\heart.png"], 1: ["Picas", "♠", "\\assets\\palos\\pica.png"],
+         2: ["Diamantes", "♦", "\\assets\\palos\\diamond.png"], 3: ["Treboles", "♣", "\\assets\\palos\\trebol.png"]}
 numeros = {1: "AS", 2: "2", 3: "3", 4: "4", 5: "5", 6: "6", 7: "7", 8: "8", 9: "9", 10: "J", 11: "Q", 12: "K", 13: "AS"}
 
 

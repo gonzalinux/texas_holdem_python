@@ -14,7 +14,7 @@ nombres = ["Knekro", "Politécnico", "Mandarino", "Patato", "Guacamole", "Yutask
 apellidos = ["el Capo", "", "", "Politécnico", "The fallen", "Son of udyr", "Sugar Daddy", "the emo", "7u7",
              "Quchau", "Virgolini", "tilted", "sinonimo de gilipollas", "De Arco", "Descole"]
 apodos = ["\"El tonto\"", "", "", "", "", "", "", '"el tikismikis"', '"el tercero del mundo"', '"el moñas"']
-
+path=str(pathlib.Path(__file__).parent.absolute())
 
 class Screen(Frame):
     def __init__(self, master):
@@ -96,7 +96,7 @@ class Screen(Frame):
         self.nombreMaquina.pack(fill=BOTH)
         self.frameNombreMaquina.grid(row=0, column=2, columnspan=15)
 
-        self.imagenpoker = Image.open("./assets/ficha_negra.png")
+        self.imagenpoker = Image.open(path+"\\assets\\ficha_negra.png")
         self.imagenpoker = self.imagenpoker.resize((100, 100))
         self.imagenpoker = ImageTk.PhotoImage(self.imagenpoker)
         self.canvasApuestaMaquina = Canvas(pantalla, bg="white", width=100, height=100, borderwidth=0,
@@ -244,7 +244,7 @@ class Screen(Frame):
             arraycanvas[i].create_text((50, 30), text=arraycartas[i].numeroescrito,
                                        font=("Arial", 24),
                                        fill=arraycartas[i].color)
-            listimagenes.append(Image.open(arraycartas[i].imgpalo))
+            listimagenes.append(Image.open(path+arraycartas[i].imgpalo))
             listimagenes[i] = listimagenes[i].resize((50, 50))
             listimagenes[i] = ImageTk.PhotoImage(listimagenes[i])
             arraycanvas[i].create_image((25, 75), image=listimagenes[i], anchor='nw')
@@ -253,32 +253,32 @@ class Screen(Frame):
         self.frameApuesta = Frame(self.parent)
         self.frameApuesta.grid(column=1, row=3, rowspan=2, columnspan=4, sticky="nw")
         self.labelApuesta = Label(self.frameApuesta, text="APUESTA", font=("Arial", 25))
-        self.imagenFlechaArriba = Image.open("./assets/f_arriba.png")
+        self.imagenFlechaArriba = Image.open(path+"\\assets\\f_arriba.png")
         self.imagenFlechaArriba = self.imagenFlechaArriba.resize((50, 50))
         self.imagenFlechaArriba = ImageTk.PhotoImage(self.imagenFlechaArriba)
 
-        self.imagenFlechaArribaOn = Image.open("./assets/f_arriba_on.png")
+        self.imagenFlechaArribaOn = Image.open(path+"\\assets\\f_arriba_on.png")
         self.imagenFlechaArribaOn = self.imagenFlechaArribaOn.resize((50, 50))
         self.imagenFlechaArribaOn = ImageTk.PhotoImage(self.imagenFlechaArribaOn)
         self.botonsubir = Label(self.frameApuesta, image=self.imagenFlechaArriba)
-        self.imagenFlechaAbajo = Image.open("./assets/f_abajo.png")
+        self.imagenFlechaAbajo = Image.open(path+"\\assets\\f_abajo.png")
         self.imagenFlechaAbajo = self.imagenFlechaAbajo.resize((50, 50))
         self.imagenFlechaAbajo = ImageTk.PhotoImage(self.imagenFlechaAbajo)
-        self.imagenFlechaAbajoOn = Image.open("./assets/f_abajo_on.png")
+        self.imagenFlechaAbajoOn = Image.open(path+"\\assets\\f_abajo_on.png")
         self.imagenFlechaAbajoOn = self.imagenFlechaAbajoOn.resize((50, 50))
         self.imagenFlechaAbajoOn = ImageTk.PhotoImage(self.imagenFlechaAbajoOn)
 
-        self.imagenTick = Image.open("./assets/tick.png")
+        self.imagenTick = Image.open(path+"\\assets\\tick.png")
         self.imagenTick = self.imagenTick.resize((50, 50))
         self.imagenTick = ImageTk.PhotoImage(self.imagenTick)
 
-        self.imagenTickOn = Image.open("./assets/tick.png")
+        self.imagenTickOn = Image.open(path+"\\assets\\tick.png")
         self.imagenTickOn = self.imagenTickOn.resize((50, 50))
         self.imagenTickOn = ImageTk.PhotoImage(self.imagenTickOn)
-        self.imagenCruz = Image.open("./assets/cruz.png")
+        self.imagenCruz = Image.open(path+"\\assets\\cruz.png")
         self.imagenCruz = self.imagenCruz.resize((50, 50))
         self.imagenCruz = ImageTk.PhotoImage(self.imagenCruz)
-        self.imagenCruzOn = Image.open("./assets/cruz_on.png")
+        self.imagenCruzOn = Image.open(path+"\\assets\\cruz_on.png")
         self.imagenCruzOn = self.imagenCruzOn.resize((50, 50))
         self.imagenCruzOn = ImageTk.PhotoImage(self.imagenCruzOn)
 
