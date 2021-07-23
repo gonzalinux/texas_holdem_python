@@ -2,8 +2,8 @@ __name__="__main__"
 
 import tkinter
 
-import Partida
-import jugada
+
+
 from tkinter import *
 import Screen
 import Carta
