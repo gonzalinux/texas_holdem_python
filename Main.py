@@ -15,7 +15,7 @@ import Carta
 
 if __name__ == '__main__':
   pantalla=tkinter.Tk()
-  pantalla.geometry("700x700")
+  pantalla.geometry("1000x700")
   pantalla.title("TEXAS HOLD'EM")
   pantalla.resizable(False,False)
   pantalla.config(cursor="cross")

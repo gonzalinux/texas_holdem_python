@@ -14,7 +14,8 @@ nombres = ["Knekro", "Politécnico", "Mandarino", "Patato", "Guacamole", "Yutask
 apellidos = ["el Capo", "", "", "Politécnico", "The fallen", "Son of udyr", "Sugar Daddy", "the emo", "7u7",
              "Quchau", "Virgolini", "tilted", "sinonimo de gilipollas", "De Arco", "Descole"]
 apodos = ["\"El tonto\"", "", "", "", "", "", "", '"el tikismikis"', '"el tercero del mundo"', '"el moñas"']
-path=str(pathlib.Path(__file__).parent.absolute())
+path = str(pathlib.Path(__file__).parent.absolute())
+
 
 class Screen(Frame):
     def __init__(self, master):
@@ -22,7 +23,7 @@ class Screen(Frame):
         super().__init__(master)
         self.parent = master
         self.callback = self.fase3cartas
-        self.player = Jugador(1000, "", None)
+        self.player = Jugador(995, "", None)
         self.maquina = Jugador(1000, self.getRandomName(), None)
         # if random.random()< 0.5:
         self.player.apuesta = 5
@@ -62,8 +63,8 @@ class Screen(Frame):
         if not self.tienenombre:
             self.sustituirtexto(self.preguntainicio, "Introduce tu nombre")
             self.botonsi.pack_forget()
-            self.introduceName = Entry(self, font=("Arial", 20), text=self.getRandomName(), bg="white", width=200)
-            self.introduceName.pack()
+            self.introduceName = Entry(self, font=("Arial", 20), text=self.getRandomName(), bg="white", width=30)
+            self.introduceName.pack(fill=NONE, )
             self.introduceName.bind('<Return>', lambda e: self.selecionasi())
             self.botonsi["text"] = "Aceptar"
             self.botonsi.pack()
@@ -74,7 +75,7 @@ class Screen(Frame):
         self.player.nombre = self.introduceName.get()
         self.clear_frame()
         pantalla = self.parent
-        pantalla.geometry("1000x800")
+        pantalla.geometry("1000x820")
         pantalla.title("Juego en curso")
         pantalla.resizable(False, False)
         pantalla.config(cursor="cross")
@@ -89,14 +90,14 @@ class Screen(Frame):
         self.frameNombreMaquina = Frame(pantalla)
         self.frameNombreMaquina["bg"] = "red"
         self.frameNombreMaquina.place(width=700, height=300)
-        self.nombreMaquina = Label(self.frameNombreMaquina, font=("Arial", 20), relief=RAISED, bg="white",
+        self.nombreMaquina = Label(self.frameNombreMaquina, font=("Arial", 20, "bold"), relief=RAISED, bg="white",
                                    fg='#C69F89',
                                    borderwidth=0)
         self.nombreMaquina["text"] = self.maquina.nombre
         self.nombreMaquina.pack(fill=BOTH)
         self.frameNombreMaquina.grid(row=0, column=2, columnspan=15)
 
-        self.imagenpoker = Image.open(path+"\\assets\\ficha_negra.png")
+        self.imagenpoker = Image.open(path + "\\assets\\ficha_negra.png")
         self.imagenpoker = self.imagenpoker.resize((100, 100))
         self.imagenpoker = ImageTk.PhotoImage(self.imagenpoker)
         self.canvasApuestaMaquina = Canvas(pantalla, bg="white", width=100, height=100, borderwidth=0,
@@ -116,7 +117,12 @@ class Screen(Frame):
 
         self.frameCartas = Frame(pantalla)
 
-        self.frameCartas.place(width=1000, height=300)
+        self.frameCartas.place(width=1000, height=600)
+        self.tapeteimg = Image.open(path + "\\assets\\tapete2.jpg")
+        self.tapeteimg = self.tapeteimg.resize((1000, 600))
+        self.tapeteimg = ImageTk.PhotoImage(self.tapeteimg)
+        self.tapete = Label(self.frameCartas, image=self.tapeteimg)
+        self.tapete.place(width=1000, height=600)
         # self.frameCartas.grid_propagate(False)
         for i in range(10):
             self.frameCartas.columnconfigure(i, minsize=50)
@@ -124,6 +130,7 @@ class Screen(Frame):
         self.frameCartas.grid(column=0, row=1, rowspan=3, columnspan=18, sticky="nsew")
         self.cartasMaquinaCanvases = [Canvas(self.frameCartas, bg="red", width="100", height=150),
                                       Canvas(self.frameCartas, bg="red", width="100", height=150)]
+
         var = 6
         for i in self.cartasMaquinaCanvases:
             i.grid(row=0, column=var, columnspan=2, padx=20)
@@ -132,7 +139,7 @@ class Screen(Frame):
         self.cartasMesaCanvases = [Canvas(self.frameCartas, bg="red", width="100", height=150) for b in range(5)]
         var = 3
         for i in self.cartasMesaCanvases:
-            i.grid(row=1, column=var, columnspan=2, padx=20)
+            i.grid(row=1, column=var, columnspan=2, padx=20, pady=20)
             var += 2
 
         self.cartasPlayerCanvases = [Canvas(self.frameCartas, bg="red", width="100", height=150),
@@ -175,7 +182,7 @@ class Screen(Frame):
         self.imagenesCartasMesa = []
         self.imagenesCartasMaquina = []
 
-        self.parent.after(2000, lambda: prueba())
+        self.parent.after(1000, lambda: prueba())
 
         def prueba():
             self.faseCiega()
@@ -221,7 +228,7 @@ class Screen(Frame):
             self.maquina.fichas -= cantidadSubir
             self.canvasFichasMaquina.itemconfig(self.idtextFichasMaquina, text=self.maquina.fichas)
         else:
-            self.ganaElPlayer()
+            self.ganaElPlayer("La maquina se ha retirado")
 
     def subirApuestaPlayer(self, cantidad):
 
@@ -234,8 +241,17 @@ class Screen(Frame):
         self.canvasApuestaPlayer.itemconfig(self.idtextApuestaPlayer, text=self.player.apuesta)
         self.canvasFichasPlayer.itemconfig(self.idtextFichasPlayer, text=self.player.fichas)
 
-    def ganaElPlayer(self):
-        self.parent["bg"] = "green"
+    def ganaElPlayer(self, razon):
+        self.frameHasGanado = Frame(self.parent, bg="Green")
+        self.labelHasGanado = Label(self.frameHasGanado, text="HAS GANADO", font=("Arial", 40), fg="black",
+                                    bg="green")
+        self.labelexplicag = Label(self.frameHasGanado, text=razon, font=("Arial", 30), fg="black",
+                                   bg=self.frameHasGanado["bg"])
+        self.frameHasGanado.grid(column=0, row=0, columnspan=18, rowspan=6, sticky="news")
+        self.labelHasGanado.pack(expand=True, fill=BOTH)
+        self.labelexplicag.pack(expand=True, fill=BOTH)
+        self.frameCartas.grid_forget()
+        self.frameCartas.grid(column=0, row=1, rowspan=3, columnspan=18, sticky="nsew")
 
     def mostrarCartas(self, arraycanvas, arraycartas, num, listimagenes):
         listimagenes.clear()
@@ -244,47 +260,48 @@ class Screen(Frame):
             arraycanvas[i].create_text((50, 30), text=arraycartas[i].numeroescrito,
                                        font=("Arial", 24),
                                        fill=arraycartas[i].color)
-            listimagenes.append(Image.open(path+arraycartas[i].imgpalo))
+            listimagenes.append(Image.open(path + arraycartas[i].imgpalo))
             listimagenes[i] = listimagenes[i].resize((50, 50))
             listimagenes[i] = ImageTk.PhotoImage(listimagenes[i])
             arraycanvas[i].create_image((25, 75), image=listimagenes[i], anchor='nw')
 
     def faseCiega(self):
-        self.frameApuesta = Frame(self.parent)
-        self.frameApuesta.grid(column=1, row=3, rowspan=2, columnspan=4, sticky="nw")
-        self.labelApuesta = Label(self.frameApuesta, text="APUESTA", font=("Arial", 25))
-        self.imagenFlechaArriba = Image.open(path+"\\assets\\f_arriba.png")
+        self.frameApuesta = Frame(self.parent, bg="#3E8989")
+        self.frameApuesta.grid(column=0, row=3, rowspan=1, columnspan=5, sticky="nwes", pady=20)
+        self.labelApuesta = Label(self.frameApuesta, text="  APUESTA", font=("Arial", 25, "bold"),
+                                  bg=self.frameApuesta["bg"], fg="#C69F89")
+        self.imagenFlechaArriba = Image.open(path + "\\assets\\f_arriba.png")
         self.imagenFlechaArriba = self.imagenFlechaArriba.resize((50, 50))
         self.imagenFlechaArriba = ImageTk.PhotoImage(self.imagenFlechaArriba)
 
-        self.imagenFlechaArribaOn = Image.open(path+"\\assets\\f_arriba_on.png")
+        self.imagenFlechaArribaOn = Image.open(path + "\\assets\\f_arriba_on.png")
         self.imagenFlechaArribaOn = self.imagenFlechaArribaOn.resize((50, 50))
         self.imagenFlechaArribaOn = ImageTk.PhotoImage(self.imagenFlechaArribaOn)
-        self.botonsubir = Label(self.frameApuesta, image=self.imagenFlechaArriba)
-        self.imagenFlechaAbajo = Image.open(path+"\\assets\\f_abajo.png")
+        self.botonsubir = Label(self.frameApuesta, image=self.imagenFlechaArriba, bg=self.frameApuesta["bg"])
+        self.imagenFlechaAbajo = Image.open(path + "\\assets\\f_abajo.png")
         self.imagenFlechaAbajo = self.imagenFlechaAbajo.resize((50, 50))
         self.imagenFlechaAbajo = ImageTk.PhotoImage(self.imagenFlechaAbajo)
-        self.imagenFlechaAbajoOn = Image.open(path+"\\assets\\f_abajo_on.png")
+        self.imagenFlechaAbajoOn = Image.open(path + "\\assets\\f_abajo_on.png")
         self.imagenFlechaAbajoOn = self.imagenFlechaAbajoOn.resize((50, 50))
         self.imagenFlechaAbajoOn = ImageTk.PhotoImage(self.imagenFlechaAbajoOn)
 
-        self.imagenTick = Image.open(path+"\\assets\\tick.png")
+        self.imagenTick = Image.open(path + "\\assets\\tick.png")
         self.imagenTick = self.imagenTick.resize((50, 50))
         self.imagenTick = ImageTk.PhotoImage(self.imagenTick)
 
-        self.imagenTickOn = Image.open(path+"\\assets\\tick.png")
+        self.imagenTickOn = Image.open(path + "\\assets\\tick.png")
         self.imagenTickOn = self.imagenTickOn.resize((50, 50))
         self.imagenTickOn = ImageTk.PhotoImage(self.imagenTickOn)
-        self.imagenCruz = Image.open(path+"\\assets\\cruz.png")
+        self.imagenCruz = Image.open(path + "\\assets\\cruz.png")
         self.imagenCruz = self.imagenCruz.resize((50, 50))
         self.imagenCruz = ImageTk.PhotoImage(self.imagenCruz)
-        self.imagenCruzOn = Image.open(path+"\\assets\\cruz_on.png")
+        self.imagenCruzOn = Image.open(path + "\\assets\\cruz_on.png")
         self.imagenCruzOn = self.imagenCruzOn.resize((50, 50))
         self.imagenCruzOn = ImageTk.PhotoImage(self.imagenCruzOn)
 
-        self.botonbajar = Label(self.frameApuesta, image=self.imagenFlechaAbajo)
-        self.botonAceptar = Label(self.frameApuesta, image=self.imagenTick)
-        self.botonCancelar = Label(self.frameApuesta, image=self.imagenCruz)
+        self.botonbajar = Label(self.frameApuesta, image=self.imagenFlechaAbajo, bg=self.frameApuesta["bg"])
+        self.botonAceptar = Label(self.frameApuesta, image=self.imagenTick, bg=self.frameApuesta["bg"])
+        self.botonCancelar = Label(self.frameApuesta, image=self.imagenCruz, bg=self.frameApuesta["bg"])
 
         self.botonsubir.bind("<Button-1>", lambda e: self.iluminarbotonsubir())
         self.botonbajar.bind("<Button-1>", lambda e: self.iluminarbotonbajar())
@@ -305,6 +322,8 @@ class Screen(Frame):
         self.frameHasPerdido.grid(column=0, row=0, columnspan=18, rowspan=6, sticky="news")
         self.labelHasPerdido.pack(expand=True, fill=BOTH)
         self.labelexplica.pack(expand=True, fill=BOTH)
+        self.frameCartas.grid_forget()
+        self.frameCartas.grid(column=0, row=1, rowspan=3, columnspan=18, sticky="nsew")
 
     def apuesta(self):
         if self.player.apuesta < self.maquina.apuesta:
@@ -360,19 +379,37 @@ class Screen(Frame):
     def termina(self):
         print("termina")
         self.mostrarCartas(self.cartasMaquinaCanvases, self.maquina.cartas, 2, self.imagenesCartasMaquina)
+        self.parent.after(2000, lambda: termina2())
 
-        puntuacionMquina = Jugadas.jugada_ganadora(self.cartasmesa, self.maquina.cartas)
-        puntuacionJugador = Jugadas.jugada_ganadora(self.cartasmesa, self.player.cartas)
+        def termina2():
 
-        if puntuacionJugador[0] > puntuacionMquina[0]:
-            self.ganaElPlayer()
-        elif puntuacionMquina[0] > puntuacionJugador[0]:
-            self.pierdeElPlayer(
-                "tiene la puntuacion mas baja " + str(puntuacionJugador[0]) + " comparada a la maquina " + str(
-                    puntuacionMquina[0]))
-        elif puntuacionMquina[1].numero > puntuacionJugador[1].numero:
-            self.pierdeElPlayer(
-                "tiene la carta mas baja " + str(puntuacionJugador[1].encadena) + " comparada a la maquina " + str(
-                    puntuacionMquina[1].encadena))
-        elif puntuacionMquina[1].numero < puntuacionJugador[1].numero:
-            self.ganaElPlayer()
+
+            self.puntuacionMquina = Jugadas.jugada_ganadora(self.cartasmesa, self.maquina.cartas)
+            self.puntuacionJugador = Jugadas.jugada_ganadora(self.cartasmesa, self.player.cartas)
+            if self.puntuacionJugador[0] > self.puntuacionMquina[0]:
+                self.ganaElPlayer(
+                    "La jugada del player es: " + Jugadas.jugada.get(self.puntuacionJugador[0]) + "\n y la de la "
+                                                                                                  "maquina es: " +
+                    Jugadas.jugada.get(self.puntuacionMquina[0]))
+                print("a")
+            elif self.puntuacionMquina[0] > self.puntuacionJugador[0]:
+                print("b")
+
+                self.pierdeElPlayer(
+                    "La jugada del player es: " + Jugadas.jugada.get(self.puntuacionJugador[0]) + "\n y la de la "
+                                                                                                  "maquina es: " +
+                    Jugadas.jugada.get(self.puntuacionMquina[0]))
+            elif self.puntuacionMquina[2].numero > self.puntuacionJugador[2].numero:
+                print("c")
+
+                self.pierdeElPlayer(
+                    "tiene la carta mas baja " + str(
+                        self.puntuacionJugador[2].encadena) + "\n comparada a la maquina " + str(
+                        self.puntuacionMquina[2].encadena))
+            elif self.puntuacionMquina[2].numero < self.puntuacionJugador[2].numero:
+                print("d")
+
+                self.ganaElPlayer("Gana el jugador por carta alta\n" + self.puntuacionJugador[2].encadena + " contra "
+                                  + self.puntuacionMquina[2].encadena)
+            else:
+                print("e")

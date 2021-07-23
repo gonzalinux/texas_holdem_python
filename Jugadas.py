@@ -1,5 +1,8 @@
 from Carta import Carta
 
+jugada = {11: "Escalera de Color", 10: "Cuarteto", 9: "Full", 8: "Color", 7: "Escalera", 6: "Trio", 5: "Doble Pareja",
+          4: "Pareja",0:"Ninguna"}
+
 
 def cmprrescolor(cartas):
     cartasaux = eliminar_repes(cartas)
@@ -21,10 +24,10 @@ def cmprrescolor(cartas):
 
 def cmpr4(cartas):
     contador = 0
-    cartanterior = cartas[-1]
+    cartanterior = None
     for carta in cartas:
 
-        if cartanterior != None and carta.numero == cartanterior.numero and carta.numero != 1:
+        if cartanterior is not None and carta.numero == cartanterior.numero and carta.numero != 1:
             contador += 1
         elif contador >= 4:
             break
@@ -33,6 +36,7 @@ def cmpr4(cartas):
         cartanterior = carta
 
     if contador >= 4:
+
         return [10, cartanterior]
     else:
         return None
@@ -111,7 +115,7 @@ def cmpresc(cartas):
 
 def cmpr3(cartas):
     contador = 1
-    cartanterior =Carta(0,0)
+    cartanterior = Carta(0, 0)
     cartasaux = list(cartas)
     cartasaux.reverse()
     for carta in cartasaux:
@@ -131,7 +135,7 @@ def cmpr3(cartas):
 
 def cmpr22(cartas):
     contador = 1
-    cartanterior = Carta(0,0)
+    cartanterior = Carta(0, 0)
     cartasaux = list(cartas)
     cartasduo = []
     cartasaux.reverse()
@@ -163,7 +167,7 @@ def cmpr22(cartas):
 
 def cmpr2(cartas):
     contador = 1
-    cartanterior = Carta(0,0)
+    cartanterior = Carta(0, 0)
     cartasaux = list(cartas)
     cartasaux.reverse()
     for carta in cartasaux:
@@ -205,7 +209,7 @@ def ordenarcartas(cartas):
             ases.append(Carta(13, carta.palo))
         else:
             break
-    cartasordenadas+=ases
+    cartasordenadas += ases
     return cartasordenadas
 
 
@@ -218,10 +222,10 @@ def eliminar_repes(cartas):
 
 
 def jugada_ganadora(cartasmesa, cartasjugador):
-
-    cartasmesa += cartasjugador
-    cartas = ordenarcartas(cartasmesa)
+    cartastotales = cartasmesa + cartasjugador
+    cartas = ordenarcartas(cartastotales)
     jugadas = list()
+
     jugadas.append(cmprrescolor(cartas))
     jugadas.append(cmpr4(cartas))
     jugadas.append(cmprfull(cartas))
@@ -232,9 +236,9 @@ def jugada_ganadora(cartasmesa, cartasjugador):
     jugadas.append(cmpr2(cartas))
     for i in jugadas:
         if i is not None:
-            return i
+            return i + [getmasalta(ordenarcartas(cartasjugador))]
 
-    return [0, getmasalta(cartas)]
+    return [0, 0, getmasalta(ordenarcartas(cartasjugador))]
 
 
 if __name__ == '__main__':
